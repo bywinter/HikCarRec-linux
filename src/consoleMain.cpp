@@ -270,11 +270,7 @@ int main()
     memcpy(struLoginInfo.sPassword, "wentuo2020", NAME_LEN);
 
     int IUserID = NET_DVR_Login_V40(&struLoginInfo, &struDeviceInfoV40);
-	switch (IUserID)
-	{
-	default:
-		break;
-	}
+
 	if (IUserID < 0)
 	{
 		printf("pyd---Login error, %d\n", NET_DVR_GetLastError());
@@ -301,8 +297,7 @@ int main()
 	SetMessageCallBack();	//注册报警回调函数 
 	while(1) {
 		SetMessageCallBack();	//报警回调函数 	
-		sleep(500);		
-		//Sleep(500);
+		sleep(100);		
 	}
 	OnExit(); 
     return 0;
