@@ -27,6 +27,11 @@ NET_DVR_DEVICEINFO_V30 struDeviceInfo;	//设备信息
 
 string carNum;//车牌号							
 string LineByLine;//逐行读取文件 
+char sDVRIP[20]="192.168.2.103";	//抓拍摄像机设备IP地址
+short wDVRPort = 8000;	//设备端口号
+char sUserName[20]="admin";	//登录的用户名
+char sPassword[20]="wentuo2020";	//用户密码
+
 
 //函数声明
 void Connect();//设置连接事件与重连时间
@@ -45,7 +50,7 @@ void OnExit(void);//退出
 void Connect()
 {
 	NET_DVR_SetConnectTime(2000, 1);
-	NET_DVR_SetReconnect(10000, true);
+	NET_DVR_SetReconnect(1000, true);
 }
 
 
@@ -178,7 +183,7 @@ void SetupAlarm()
 		NET_DVR_Cleanup();
 		return;
 	}
-	std::cout << "\n" << endl;
+	std::cout << "报警布防成功！" << endl;
 }
 //报警撤防
 void CloseAlarm()
@@ -251,7 +256,6 @@ void Blacklist() {
 	iFile.close();//关闭文件
 }
 
-
 int main()
 {	
 	NET_DVR_Init();
@@ -259,6 +263,8 @@ int main()
     NET_DVR_SetLogToFile(3, "./sdkLog");
     char cUserChoose = 'r';
     
+	//Login();
+	
     //Login device
     NET_DVR_USER_LOGIN_INFO struLoginInfo = {0};
     NET_DVR_DEVICEINFO_V40 struDeviceInfoV40 = {0};
@@ -269,35 +275,25 @@ int main()
     memcpy(struLoginInfo.sUserName, "admin", NAME_LEN);
     memcpy(struLoginInfo.sPassword, "wentuo2020", NAME_LEN);
 
-    int IUserID = NET_DVR_Login_V40(&struLoginInfo, &struDeviceInfoV40);
+    IUserID = NET_DVR_Login_V40(&struLoginInfo, &struDeviceInfoV40);
 
 	if (IUserID < 0)
-	{
-		printf("pyd---Login error, %d\n", NET_DVR_GetLastError());
-        printf("Press any key to quit...\n");
+    {
+        printf("NET_DVR_SetupAlarmChan_V41 failed, error code: %d\n", NET_DVR_GetLastError());
+		printf("Press any key to quit...\n");
         cin>>cUserChoose;
-        NET_DVR_Cleanup();
+        NET_DVR_Logout(IUserID);
+        NET_DVR_Cleanup(); 
         return HPR_ERROR;
-	}
-	else if (IUserID == 0) {
-		std::cout << "Login Succeed" << std::endl;
-		return true;
-	}
-	else if (IUserID == 1) {
-		cout << "User Name And Password False" << endl;
-		return false;
-	}
-	else {
-		cout << "Login Faild:" + IUserID << endl;
-		return false;
-	}
-	
+    }
+    printf("布防成功!\n");
+
 	Connect();//设置连接事件与重连时间			  	
 	SetupAlarm();//布防，此处应该是一级布防
 	SetMessageCallBack();	//注册报警回调函数 
 	while(1) {
 		SetMessageCallBack();	//报警回调函数 	
-		sleep(100);		
+		sleep(500);		
 	}
 	OnExit(); 
     return 0;
