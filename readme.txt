@@ -1,5 +1,3 @@
-   Before you build the source code, please copy library files to the folder "lib".
-   For example, 
-   (1)If you build linux32 project, you need to copy library(.so) to the folder "./linux32/lib/".
-   (2)Go to the folder "./linux32/proj", then make.
-  
+   构建源码之前，请先将库文件复制到lib下。
+   本套源码运行在Debian 9.9下测试通过，针对一般带车牌识别功能的海康威视摄像头可以进行识别。
+   GOOD LUCK！ ：D
