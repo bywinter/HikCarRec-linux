@@ -30,7 +30,7 @@ string LineByLine;//逐行读取文件
 char sDVRIP[20]="192.168.2.103";	//抓拍摄像机设备IP地址
 short wDVRPort = 8000;	//设备端口号
 char sUserName[20]="admin";	//登录的用户名
-char sPassword[20]="wentuo2020";	//用户密码
+char sPassword[20]="youPassword";	//用户密码
 
 
 //函数声明
